@@ -1,0 +1,8 @@
+const val START = "\\u001b["
+const val RED = "${START}31m"
+const val YELLOW = "${START}93m"
+const val GREEN = "${START}92m"
+const val BLUE = "${START}94m"
+const val GREY  = "${START}37m"
+const val BRIGHT_RED = "${START}91m"
+const val RESET = "${START}0m"
