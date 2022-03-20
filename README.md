@@ -6,7 +6,7 @@ Simple Logging Library for the GodBot Project
 
 ## Functionalities
 
-- Logging Modes (Info, Warning, Error)
+- Logging Modes (Info, Warning, Error, Fatal)
 - Logging Levels (Low, Medium, High)
 - Colored Output
 

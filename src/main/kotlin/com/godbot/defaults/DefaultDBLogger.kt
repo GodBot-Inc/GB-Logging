@@ -31,6 +31,12 @@ open class DefaultDBLogger(private val dbc: LoggerDBC): LoggerImpl() {
         dbc.saveLog(log)
     }
 
+    override fun fatal(msg: String, lvl: LoggingLevel) {
+        val log = LogImpl(getId(), "fatal", lvl, msg)
+        println(log.toString())
+        dbc.saveLog(log)
+    }
+
     override fun openGroup(operationTitle: String, lvl: LoggingLevel): DefaultChildDBLogger {
         childLogSaves.clear()
         val groupId = getId()

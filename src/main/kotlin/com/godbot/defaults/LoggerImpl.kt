@@ -22,6 +22,10 @@ open class LoggerImpl : Logger {
         println(LogImpl(getId(), "error", lvl, msg).toString())
     }
 
+    override fun fatal(msg: String, lvl: LoggingLevel) {
+        println(LogImpl(getId(), "fatal", lvl, msg).toString())
+    }
+
     open fun openGroup(operationTitle: String, lvl: LoggingLevel): ChildLogger {
         val groupId = getId()
         println("$newGroup | ${resolveLoggingLvl(lvl)} | $operationTitle | $groupId")

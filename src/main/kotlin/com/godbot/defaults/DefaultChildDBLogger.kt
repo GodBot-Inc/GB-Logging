@@ -22,4 +22,10 @@ class DefaultChildDBLogger(override val groupId: String, private val parentLogge
         println("   $log")
         parentLogger.save(log)
     }
+
+    override fun fatal(msg: String, lvl: LoggingLevel) {
+        val log = LogImpl(getId(), "fatal", lvl, msg)
+        println("   $log")
+        parentLogger.save(log)
+    }
 }

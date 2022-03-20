@@ -16,4 +16,8 @@ open class ChildLoggerImpl(override val groupId: String) : ChildLogger {
     override fun error(msg: String, lvl: LoggingLevel) {
         println("   ${LogImpl(getId(), "error", lvl, msg)}")
     }
+
+    override fun fatal(msg: String, lvl: LoggingLevel) {
+        println("   ${LogImpl(getId(), "fatal", lvl, msg)}}")
+    }
 }

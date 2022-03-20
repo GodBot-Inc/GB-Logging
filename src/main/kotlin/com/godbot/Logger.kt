@@ -6,4 +6,5 @@ interface Logger {
     fun info(msg: String, lvl: LoggingLevel)
     fun warning(msg: String, lvl: LoggingLevel)
     fun error(msg: String, lvl: LoggingLevel)
+    fun fatal(msg: String, lvl: LoggingLevel)
 }

@@ -8,6 +8,4 @@ open class GroupLogImpl(
     override val lvl: LoggingLevel,
     override val title: String,
     override val childLogs: ArrayList<Log>
-): GroupLog {
-
-}
+): GroupLog

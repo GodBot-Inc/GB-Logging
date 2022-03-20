@@ -1,11 +1,9 @@
 package com.godbot.database.models
 
-import com.andreapivetta.kolor.blue
-import com.andreapivetta.kolor.lightGray
-import com.andreapivetta.kolor.red
-import com.andreapivetta.kolor.yellow
 import com.godbot.LoggingLevel
+import com.godbot.getDate
 import com.godbot.resolveLoggingLvl
+import com.godbot.resolveLoggingType
 
 open class LogImpl(
     override val id: String,
@@ -14,13 +12,8 @@ open class LogImpl(
     override val msg: String
 ): Log {
     override fun toString(): String {
-        val type = when(type) {
-            "info" -> "Info     ".blue()
-            "warning" -> "Warning  ".yellow()
-            "error" -> "Error    ".red()
-            else -> "unknown  ".lightGray()
-        }
+        val type = resolveLoggingType(type)
 
-        return "$type | ${resolveLoggingLvl(lvl)} | $msg | $id"
+        return "${getDate()} | $type | ${resolveLoggingLvl(lvl)} | $msg | $id"
     }
 }
