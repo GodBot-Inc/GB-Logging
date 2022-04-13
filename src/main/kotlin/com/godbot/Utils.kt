@@ -16,9 +16,10 @@ fun resolveLoggingType(type: String): String {
     return when(type) {
         "info" -> "Info     ".blue()
         "warning" -> "Warning  ".yellow()
-        "error" -> "Error    ".red()
+        "error" -> "Error    ".lightRed()
         "fatal" -> "FATAL    ".red()
-        else -> "unknown  ".lightGray()
+        "newgroup" -> "New Group".green()
+        else -> "unknown  "
     }
 }
 
@@ -26,7 +27,7 @@ fun getDate(): String {
     val current = LocalDateTime.now()
     val format = when(timeFormatLanguage) {
         Languages.DE -> "dd.MM HH:mm:ss"
-        Languages.US -> "MM-dd HH:mm:ss"
+        Languages.US -> "MM.dd HH:mm:ss"
     }
     return DateTimeFormatter.ofPattern(format).format(current)
 }

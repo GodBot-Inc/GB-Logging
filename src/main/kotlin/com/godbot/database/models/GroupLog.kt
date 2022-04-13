@@ -1,11 +1,5 @@
 package com.godbot.database.models
 
-import com.godbot.LoggingLevel
-
-interface GroupLog {
-    val id: String
-    val type: String
-    val lvl: LoggingLevel
-    val title: String
+interface GroupLog: Log {
     val childLogs: ArrayList<Log>
 }
