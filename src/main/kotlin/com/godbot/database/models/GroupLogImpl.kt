@@ -20,4 +20,8 @@ open class GroupLogImpl(
         childLogStr.append("]")
         return "${getDate()} | $msg | ${resolveLoggingType(type)} | ${resolveLoggingLvl(lvl)} | $childLogStr"
     }
+
+    override fun printToString() {
+        println(toString())
+    }
 }

@@ -1,6 +1,7 @@
 package com.godbot
 
 import com.andreapivetta.kolor.*
+import com.godbot.database.models.GroupLog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -30,4 +31,8 @@ fun getDate(): String {
         Languages.US -> "MM.dd HH:mm:ss"
     }
     return DateTimeFormatter.ofPattern(format).format(current)
+}
+
+fun formatStackLog(logs: List<GroupLog>) {
+
 }

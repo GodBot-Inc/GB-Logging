@@ -24,7 +24,7 @@ class DefaultGroupLog(
         return "$standard$msg"
     }
 
-    fun printToString() {
+    override fun printToString() {
         println(this.toString())
     }
 }
