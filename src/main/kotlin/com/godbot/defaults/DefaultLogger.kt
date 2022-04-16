@@ -68,6 +68,6 @@ open class DefaultLogger(
     fun closeGroup(logger: Logger) {
         childLoggers.remove(logger)
         if (collectiveLogging)
-            childLogs[logger]?.printWholeLog()
+            childLogs[logger]?.printToString()
     }
 }

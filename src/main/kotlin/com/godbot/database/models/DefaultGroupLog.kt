@@ -13,7 +13,7 @@ class DefaultGroupLog(
     override val msg: String,
     override val childLogs: ArrayList<Log> = ArrayList(),
 ): GroupLogImpl(id, type, lvl, msg) {
-    fun printWholeLog() {
+    override fun toString(): String {
         var standard = "${getDate().lightGray()} | ${"New Group".green()} | $msg"
         if (showId)
             standard = "${id.lightGray()} | $standard"
@@ -21,14 +21,10 @@ class DefaultGroupLog(
         for (log: Log in childLogs) {
             msg.append("\n$log")
         }
-        println("$standard$msg")
+        return "$standard$msg"
     }
 
-    fun printChildLogs() {
-        val msg = StringBuilder()
-        for(log: Log in childLogs) {
-            msg.append(log.toString() + "\n")
-        }
-        println(msg)
+    fun printToString() {
+        println(this.toString())
     }
 }
