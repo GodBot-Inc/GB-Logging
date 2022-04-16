@@ -1,15 +1,16 @@
 package com.godbot.defaults
 
-import com.godbot.LoggingLevel
+import com.andreapivetta.kolor.green
+import com.andreapivetta.kolor.lightGray
+import com.godbot.*
 import com.godbot.database.models.DefaultGroupLog
 import com.godbot.database.models.Log
-import com.godbot.lowestLoggingLevel
 
 open class DefaultLogger(
     private val defaultLoggingLevel: LoggingLevel = LoggingLevel.HIGH
 ): LoggerImpl() {
-    protected var childLogs: DefaultGroupLog? = null
-    protected var childLogger: DefaultChildLogger? = null
+    protected val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
+    protected val childLogs: HashMap<DefaultChildLogger, DefaultGroupLog> = HashMap()
 
     override fun info(msg: String, lvl: LoggingLevel) {
         if (lvl >= lowestLoggingLevel)
@@ -35,31 +36,38 @@ open class DefaultLogger(
     }
     fun fatal(msg: String) = apply { fatal(msg, defaultLoggingLevel) }
 
-    fun saveLog(log: Log) {
-        childLogs?.childLogs?.add(log)
+    fun saveLog(logger: Logger, log: Log) {
+        childLogs[logger]?.childLogs?.add(log)
     }
 
     fun openGroup(
         groupTitle: String,
         lvl: LoggingLevel = LoggingLevel.LOW,
         ): DefaultChildLogger {
-        closeGroup()
         val groupId = getId()
-        childLogs = DefaultGroupLog(
+        val holdingChildLogger = DefaultChildLogger(this, lvl)
+
+        childLogs[holdingChildLogger] = DefaultGroupLog(
             groupId,
             "newgroup",
             lvl,
-            groupTitle,
+            groupTitle
         )
 
-        val holdingChildLogger = DefaultChildLogger(this, lvl)
-        childLogger = holdingChildLogger
+        if (!collectiveLogging) {
+            var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
+            if (showId)
+                standard = "${groupId.lightGray()} | $standard"
+            println(standard)
+        }
+
+        childLoggers.add(holdingChildLogger)
         return holdingChildLogger
     }
 
-    fun closeGroup() {
-        childLogs?.printWholeLog()
-        childLogger = null
-        childLogs = null
+    fun closeGroup(logger: Logger) {
+        childLoggers.remove(logger)
+        if (collectiveLogging)
+            childLogs[logger]?.printWholeLog()
     }
 }
