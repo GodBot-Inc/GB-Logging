@@ -57,9 +57,7 @@ open class DefaultLogger(
     }
 
     fun closeGroup() {
-        val msg = childLogs?.printWholeLog()
-        if (msg != null)
-            println(msg)
+        childLogs?.printWholeLog()
         childLogger = null
         childLogs = null
     }
