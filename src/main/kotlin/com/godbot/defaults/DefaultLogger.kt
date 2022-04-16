@@ -44,7 +44,6 @@ open class DefaultLogger(
         lvl: LoggingLevel = LoggingLevel.LOW,
         ): DefaultChildLogger {
         closeGroup()
-        childLogger = DefaultChildLogger(this, lvl)
         val groupId = getId()
         childLogs = DefaultGroupLog(
             groupId,
@@ -53,7 +52,9 @@ open class DefaultLogger(
             groupTitle,
         )
 
-        return childLogger!!
+        val holdingChildLogger = DefaultChildLogger(this, lvl)
+        childLogger = holdingChildLogger
+        return holdingChildLogger
     }
 
     fun closeGroup() {
