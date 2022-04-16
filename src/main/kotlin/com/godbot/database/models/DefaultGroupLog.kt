@@ -19,9 +19,9 @@ class DefaultGroupLog(
             standard = "${id.lightGray()} | $standard"
         val msg = StringBuilder()
         for (log: Log in childLogs) {
-            msg.append(log.toString() + "\n")
+            msg.append("\n$log")
         }
-        println("$standard\n$msg")
+        println("$standard$msg")
     }
 
     fun printChildLogs() {
