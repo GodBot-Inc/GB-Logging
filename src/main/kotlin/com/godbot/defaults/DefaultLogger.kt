@@ -1,18 +1,14 @@
 package com.godbot.defaults
 
-import com.andreapivetta.kolor.green
-import com.andreapivetta.kolor.lightGray
 import com.godbot.LoggingLevel
-import com.godbot.database.models.GroupLog
-import com.godbot.database.models.GroupLogImpl
-import com.godbot.getDate
+import com.godbot.database.models.DefaultGroupLog
+import com.godbot.database.models.Log
 import com.godbot.lowestLoggingLevel
-import com.godbot.showId
 
 open class DefaultLogger(
     private val defaultLoggingLevel: LoggingLevel = LoggingLevel.HIGH
 ): LoggerImpl() {
-    protected var childLogs: GroupLog? = null
+    protected var childLogs: DefaultGroupLog? = null
     protected var childLogger: DefaultChildLogger? = null
 
     override fun info(msg: String, lvl: LoggingLevel) {
@@ -39,24 +35,32 @@ open class DefaultLogger(
     }
     fun fatal(msg: String) = apply { fatal(msg, defaultLoggingLevel) }
 
+    fun saveLog(log: Log) {
+        childLogs?.childLogs?.add(log)
+    }
+
     fun openGroup(
         groupTitle: String,
         lvl: LoggingLevel = LoggingLevel.LOW,
         ): DefaultChildLogger {
+        closeGroup()
         childLogger = DefaultChildLogger(this, lvl)
         val groupId = getId()
-        childLogs = GroupLogImpl(
+        childLogs = DefaultGroupLog(
             groupId,
             "newgroup",
             lvl,
             groupTitle,
         )
 
-        var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
-        if (showId)
-            standard = groupId.lightGray() + " | " + standard
-        println(standard)
-
         return childLogger!!
+    }
+
+    fun closeGroup() {
+        val msg = childLogs?.printWholeLog()
+        if (msg != null)
+            println(msg)
+        childLogger = null
+        childLogs = null
     }
 }
