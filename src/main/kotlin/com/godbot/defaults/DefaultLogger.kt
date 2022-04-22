@@ -37,7 +37,7 @@ open class DefaultLogger(
         return holdingChildLogger
     }
 
-    fun closeAllChildren() {
+    fun nonBlockingCloseAllChildren() {
         val msg = StringBuilder()
         for (logger: ChildLogger in childLoggers) {
             msg.append(logger.provideClosingMessage())
@@ -45,7 +45,7 @@ open class DefaultLogger(
         print(msg)
     }
 
-    fun nonBlockingCloseAllChildren() {
+    fun closeAllChildren() {
         val msg = StringBuilder()
         for (logger: ChildLogger in childLoggers) {
             while (!logger.readyToClose) {

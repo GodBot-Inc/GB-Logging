@@ -1,9 +1,23 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+    }
+}
+
 plugins {
     id'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id"com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 group 'com.godbot-music'
 version '1.1.1'
+
+apply plugin: "com.github.johnrengelman.shadow"
 
 repositories {
     mavenCentral()
