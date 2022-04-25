@@ -38,21 +38,25 @@ open class DefaultLogger(
     }
 
     fun nonBlockingCloseAllChildren() {
-        val msg = StringBuilder()
-        for (logger: ChildLogger in childLoggers) {
-            msg.append(logger.provideClosingMessage())
+        if (collectiveLogging) {
+            val msg = StringBuilder()
+            for (logger: ChildLogger in childLoggers) {
+                msg.append(logger.provideClosingMessage())
+            }
+            print(msg)
         }
-        print(msg)
     }
 
     fun closeAllChildren() {
-        val msg = StringBuilder()
-        for (logger: ChildLogger in childLoggers) {
-            while (!logger.readyToClose) {
-                Thread.sleep(1)
+        if (collectiveLogging) {
+            val msg = StringBuilder()
+            for (logger: ChildLogger in childLoggers) {
+                while (!logger.readyToClose) {
+                    Thread.sleep(1)
+                }
+                msg.append(logger.provideNonBlockingClosingMessage())
             }
-            msg.append(logger.provideNonBlockingClosingMessage())
+            print(msg)
         }
-        print(msg)
     }
 }
