@@ -52,7 +52,8 @@ class DefaultChildLogger(
                 groupId,
                 "newgroup",
                 lvl,
-                groupTitle
+                groupTitle,
+                indents + 1
             )
         )
 

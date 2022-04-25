@@ -11,10 +11,14 @@ class DefaultGroupLog(
     override val type: String,
     override val lvl: LoggingLevel,
     override val msg: String,
+    val indents: Int = 0,
     override val childLogs: ArrayList<Log> = ArrayList(),
 ): GroupLogImpl(id, type, lvl, msg) {
     override fun toString(): String {
-        var standard = "${getDate().lightGray()} | ${"New Group".green()} | $msg"
+        var groupIndent = indents - 1
+        if (groupIndent < 0)
+            groupIndent = 0
+        var standard = "  ".repeat(groupIndent) + "${getDate().lightGray()} | ${"New Group".green()} | $msg"
         if (showId)
             standard = "${id.lightGray()} | $standard"
         val msg = StringBuilder()
