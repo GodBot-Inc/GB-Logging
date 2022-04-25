@@ -26,7 +26,7 @@ open class DefaultLogger(
             )
         )
 
-        if (!collectiveLogging) {
+        if (!collectedLogging && lvl >= lowestLoggingLevel) {
             var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
@@ -38,7 +38,7 @@ open class DefaultLogger(
     }
 
     fun nonBlockingCloseAllChildren() {
-        if (collectiveLogging) {
+        if (collectedLogging) {
             val msg = StringBuilder()
             for (logger: ChildLogger in childLoggers) {
                 msg.append(logger.provideNonBlockingClosingMessage())
@@ -48,7 +48,7 @@ open class DefaultLogger(
     }
 
     fun closeAllChildren() {
-        if (collectiveLogging) {
+        if (collectedLogging) {
             val msg = StringBuilder()
             for (logger: ChildLogger in childLoggers) {
                 while (!logger.readyToClose) {

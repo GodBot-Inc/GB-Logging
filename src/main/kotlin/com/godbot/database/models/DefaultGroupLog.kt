@@ -4,6 +4,7 @@ import com.andreapivetta.kolor.green
 import com.andreapivetta.kolor.lightGray
 import com.godbot.LoggingLevel
 import com.godbot.getDate
+import com.godbot.resolveLoggingLvl
 import com.godbot.showId
 
 class DefaultGroupLog(
@@ -18,7 +19,7 @@ class DefaultGroupLog(
         var groupIndent = indents - 1
         if (groupIndent < 0)
             groupIndent = 0
-        var standard = "  ".repeat(groupIndent) + "${getDate().lightGray()} | ${"New Group".green()} | $msg"
+        var standard = "  ".repeat(groupIndent) + "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $msg"
         if (showId)
             standard = "${id.lightGray()} | $standard"
         val msg = StringBuilder()

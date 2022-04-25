@@ -17,7 +17,7 @@ class DefaultChildLogger(
 
     private fun checkSend(type: String, msg: String) {
         if (loggingLevel >= lowestLoggingLevel) {
-            if (collectiveLogging)
+            if (collectedLogging)
                 groupLog.childLogs.add(DefaultLog(getId(), type, loggingLevel, msg, indents))
             else
                 println(DefaultLog(getId(), type, loggingLevel, msg, indents))
@@ -49,7 +49,7 @@ class DefaultChildLogger(
             )
         )
 
-        if (!collectiveLogging) {
+        if (!collectedLogging && lvl >= lowestLoggingLevel) {
             var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
