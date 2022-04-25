@@ -41,7 +41,7 @@ open class DefaultLogger(
         if (collectiveLogging) {
             val msg = StringBuilder()
             for (logger: ChildLogger in childLoggers) {
-                msg.append(logger.provideClosingMessage())
+                msg.append(logger.provideNonBlockingClosingMessage())
             }
             print(msg)
         }
@@ -54,7 +54,7 @@ open class DefaultLogger(
                 while (!logger.readyToClose) {
                     Thread.sleep(1)
                 }
-                msg.append(logger.provideNonBlockingClosingMessage())
+                msg.append(logger.provideClosingMessage())
             }
             print(msg)
         }
