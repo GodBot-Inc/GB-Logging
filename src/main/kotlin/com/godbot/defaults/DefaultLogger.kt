@@ -27,7 +27,7 @@ open class DefaultLogger(
         )
 
         if (!collectiveLogging) {
-            var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
+            var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
             println(standard)

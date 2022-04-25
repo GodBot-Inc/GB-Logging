@@ -15,30 +15,22 @@ class DefaultChildLogger(
     protected val childLoggers: ArrayList<ChildLogger> = ArrayList()
     override var readyToClose = false
 
-    override fun info(msg: String) {
-        if (collectiveLogging)
-            groupLog.childLogs.add(DefaultLog(getId(), "info", loggingLevel, msg, indents))
-        else
-            println(DefaultLog(getId(), "info", loggingLevel, msg, indents))
+    private fun checkSend(type: String, msg: String) {
+        if (loggingLevel >= lowestLoggingLevel) {
+            if (collectiveLogging)
+                groupLog.childLogs.add(DefaultLog(getId(), type, loggingLevel, msg, indents))
+            else
+                println(DefaultLog(getId(), type, loggingLevel, msg, indents))
+        }
     }
-    override fun warning(msg: String) {
-        if (collectiveLogging)
-            groupLog.childLogs.add(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
-        else
-            println(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
-    }
-    override fun error(msg: String) {
-        if (collectiveLogging)
-            groupLog.childLogs.add(DefaultLog(getId(), "error", loggingLevel, msg, indents))
-        else
-            println(DefaultLog(getId(), "error", loggingLevel, msg, indents))
-    }
-    override fun fatal(msg: String) {
-        if (collectiveLogging)
-            groupLog.childLogs.add(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
-        else
-            println(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
-    }
+
+    override fun info(msg: String) = checkSend("info", msg)
+
+    override fun warning(msg: String) = checkSend("warning", msg)
+
+    override fun error(msg: String) = checkSend("error", msg)
+
+    override fun fatal(msg: String) = checkSend("fatal", msg)
 
     override fun openGroup(
         groupTitle: String,
@@ -58,7 +50,7 @@ class DefaultChildLogger(
         )
 
         if (!collectiveLogging) {
-            var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
+            var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
             println("  ".repeat(indents) + standard)
