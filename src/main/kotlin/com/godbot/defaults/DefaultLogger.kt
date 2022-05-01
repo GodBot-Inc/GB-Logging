@@ -10,7 +10,7 @@ open class DefaultLogger(
 ): LoggerImpl() {
     val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
 
-    fun openGroup(
+    open fun openGroup(
         groupTitle: String,
         lvl: LoggingLevel,
         ): DefaultChildLogger {
@@ -37,7 +37,7 @@ open class DefaultLogger(
         return holdingChildLogger
     }
 
-    fun nonBlockingCloseAllChildren() {
+    open fun nonBlockingCloseAllChildren() {
         val msg = StringBuilder()
         for (logger: ChildLogger in childLoggers) {
             msg.append(logger.provideClosingMessage())
@@ -45,7 +45,7 @@ open class DefaultLogger(
         print(msg)
     }
 
-    fun closeAllChildren() {
+    open fun closeAllChildren() {
         val msg = StringBuilder()
         for (logger: ChildLogger in childLoggers) {
             while (!logger.readyToClose) {
