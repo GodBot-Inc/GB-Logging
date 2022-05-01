@@ -8,7 +8,7 @@ import com.godbot.database.models.DefaultGroupLog
 open class DefaultLogger(
     private val defaultLoggingLevel: LoggingLevel = LoggingLevel.HIGH
 ): LoggerImpl() {
-    protected val childLoggers: ArrayList<ChildLogger> = ArrayList()
+    val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
 
     fun openGroup(
         groupTitle: String,

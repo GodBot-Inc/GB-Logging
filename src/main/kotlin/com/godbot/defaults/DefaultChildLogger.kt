@@ -12,7 +12,7 @@ class DefaultChildLogger(
     private val indents: Int,
     override val groupLog: GroupLog
 ): ChildLogger {
-    protected val childLoggers: ArrayList<ChildLogger> = ArrayList()
+    val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
     override var readyToClose = false
 
     override fun info(msg: String) {
