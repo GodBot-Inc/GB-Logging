@@ -16,25 +16,25 @@ open class DefaultChildLogger(
     override var readyToClose = false
 
     open override fun info(msg: String) {
-        if (collectiveLogging)
+        if (collectedLogging)
             groupLog.childLogs.add(DefaultLog(getId(), "info", loggingLevel, msg, indents))
         else
             println(DefaultLog(getId(), "info", loggingLevel, msg, indents))
     }
     open override fun warning(msg: String) {
-        if (collectiveLogging)
+        if (collectedLogging)
             groupLog.childLogs.add(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
         else
             println(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
     }
     open override fun error(msg: String) {
-        if (collectiveLogging)
+        if (collectedLogging)
             groupLog.childLogs.add(DefaultLog(getId(), "error", loggingLevel, msg, indents))
         else
             println(DefaultLog(getId(), "error", loggingLevel, msg, indents))
     }
     open override fun fatal(msg: String) {
-        if (collectiveLogging)
+        if (collectedLogging)
             groupLog.childLogs.add(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
         else
             println(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
@@ -56,7 +56,7 @@ open class DefaultChildLogger(
             )
         )
 
-        if (!collectiveLogging) {
+        if (!collectedLogging) {
             var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
@@ -71,7 +71,7 @@ open class DefaultChildLogger(
         val msg = StringBuilder("$groupLog\n")
         for (logger: ChildLogger in childLoggers) {
             while (!logger.readyToClose) {
-                Thread.sleep(1)
+                Thread.sleep(100)
             }
             msg.append(logger.provideClosingMessage())
         }
