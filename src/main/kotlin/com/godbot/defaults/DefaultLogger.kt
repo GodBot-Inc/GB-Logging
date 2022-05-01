@@ -8,9 +8,9 @@ import com.godbot.database.models.DefaultGroupLog
 open class DefaultLogger(
     private val defaultLoggingLevel: LoggingLevel = LoggingLevel.HIGH
 ): LoggerImpl() {
-    protected val childLoggers: ArrayList<ChildLogger> = ArrayList()
+    val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
 
-    fun openGroup(
+    open fun openGroup(
         groupTitle: String,
         lvl: LoggingLevel,
         ): DefaultChildLogger {
@@ -26,8 +26,8 @@ open class DefaultLogger(
             )
         )
 
-        if (!collectedLogging && lvl >= lowestLoggingLevel) {
-            var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
+        if (!collectiveLogging) {
+            var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
             println(standard)
@@ -37,26 +37,22 @@ open class DefaultLogger(
         return holdingChildLogger
     }
 
-    fun nonBlockingCloseAllChildren() {
-        if (collectedLogging) {
-            val msg = StringBuilder()
-            for (logger: ChildLogger in childLoggers) {
-                msg.append(logger.provideNonBlockingClosingMessage())
-            }
-            print(msg)
+    open fun nonBlockingCloseAllChildren() {
+        val msg = StringBuilder()
+        for (logger: ChildLogger in childLoggers) {
+            msg.append(logger.provideClosingMessage())
         }
+        print(msg)
     }
 
-    fun closeAllChildren() {
-        if (collectedLogging) {
-            val msg = StringBuilder()
-            for (logger: ChildLogger in childLoggers) {
-                while (!logger.readyToClose) {
-                    Thread.sleep(1)
-                }
-                msg.append(logger.provideClosingMessage())
+    open fun closeAllChildren() {
+        val msg = StringBuilder()
+        for (logger: ChildLogger in childLoggers) {
+            while (!logger.readyToClose) {
+                Thread.sleep(1)
             }
-            print(msg)
+            msg.append(logger.provideNonBlockingClosingMessage())
         }
+        print(msg)
     }
 }

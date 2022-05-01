@@ -7,32 +7,40 @@ import com.godbot.database.models.DefaultGroupLog
 import com.godbot.database.models.DefaultLog
 import com.godbot.database.models.GroupLog
 
-class DefaultChildLogger(
+open class DefaultChildLogger(
     private val loggingLevel: LoggingLevel,
     private val indents: Int,
     override val groupLog: GroupLog
 ): ChildLogger {
-    protected val childLoggers: ArrayList<ChildLogger> = ArrayList()
+    val childLoggers: ArrayList<DefaultChildLogger> = ArrayList()
     override var readyToClose = false
 
-    private fun checkSend(type: String, msg: String) {
-        if (loggingLevel >= lowestLoggingLevel) {
-            if (collectedLogging)
-                groupLog.childLogs.add(DefaultLog(getId(), type, loggingLevel, msg, indents))
-            else
-                println(DefaultLog(getId(), type, loggingLevel, msg, indents))
-        }
+    open override fun info(msg: String) {
+        if (collectiveLogging)
+            groupLog.childLogs.add(DefaultLog(getId(), "info", loggingLevel, msg, indents))
+        else
+            println(DefaultLog(getId(), "info", loggingLevel, msg, indents))
+    }
+    open override fun warning(msg: String) {
+        if (collectiveLogging)
+            groupLog.childLogs.add(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
+        else
+            println(DefaultLog(getId(), "warning", loggingLevel, msg, indents))
+    }
+    open override fun error(msg: String) {
+        if (collectiveLogging)
+            groupLog.childLogs.add(DefaultLog(getId(), "error", loggingLevel, msg, indents))
+        else
+            println(DefaultLog(getId(), "error", loggingLevel, msg, indents))
+    }
+    open override fun fatal(msg: String) {
+        if (collectiveLogging)
+            groupLog.childLogs.add(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
+        else
+            println(DefaultLog(getId(), "fatal", loggingLevel, msg, indents))
     }
 
-    override fun info(msg: String) = checkSend("info", msg)
-
-    override fun warning(msg: String) = checkSend("warning", msg)
-
-    override fun error(msg: String) = checkSend("error", msg)
-
-    override fun fatal(msg: String) = checkSend("fatal", msg)
-
-    override fun openGroup(
+    open override fun openGroup(
         groupTitle: String,
         lvl: LoggingLevel
     ): DefaultChildLogger {
@@ -44,13 +52,12 @@ class DefaultChildLogger(
                 groupId,
                 "newgroup",
                 lvl,
-                groupTitle,
-                indents + 1
+                groupTitle
             )
         )
 
-        if (!collectedLogging && lvl >= lowestLoggingLevel) {
-            var standard = "${getDate().lightGray()} | ${"New Group".green()} | ${resolveLoggingLvl(lvl)} | $groupTitle"
+        if (!collectiveLogging) {
+            var standard = "${getDate().lightGray()} | ${"New Group".green()} | $groupTitle"
             if (showId)
                 standard = "${groupId.lightGray()} | $standard"
             println("  ".repeat(indents) + standard)
@@ -60,7 +67,7 @@ class DefaultChildLogger(
         return holdingChildLogger
     }
 
-    override fun provideClosingMessage(): String {
+    open override fun provideClosingMessage(): String {
         val msg = StringBuilder("$groupLog\n")
         for (logger: ChildLogger in childLoggers) {
             while (!logger.readyToClose) {
@@ -71,7 +78,7 @@ class DefaultChildLogger(
         return msg.toString()
     }
 
-    override fun provideNonBlockingClosingMessage(): String {
+    open override fun provideNonBlockingClosingMessage(): String {
         val msg = StringBuilder("$groupLog\n")
         for (logger: ChildLogger in childLoggers) {
             msg.append(logger.provideNonBlockingClosingMessage())
@@ -79,7 +86,7 @@ class DefaultChildLogger(
         return msg.toString()
     }
 
-    override fun readyToClose() {
+    open override fun readyToClose() {
         readyToClose = true
     }
 }
